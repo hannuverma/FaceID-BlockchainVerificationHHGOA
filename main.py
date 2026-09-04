@@ -94,28 +94,29 @@ def reverse_image_search(image_path: str = "face_extracted.jpg"):
         print(f"Error {e}")
     results = client.get_dict()
     visual_matches = results.get("visual_matches", [])
+
     if "error" in results:
         print(f"Error: {results['error']}")
         return
     
     # Filter for known social networks or return the top matched source
-    target_domains = ["twitter.com", "x.com", "instagram.com", "linkedin.com", "reddit.com"]
-    matched_post = None
+    target_domains = ["twitter.com", "x.com", "instagram.com", "linkedin.com", "reddit.com", "facebook.com"]
+    matched_posts = []
 
     for item in visual_matches:
 
         link = item.get("link", "")
         if any(domain in link for domain in target_domains):
-
             matched_post = {
                 "title": item.get("title"),
                 "url": link,
                 "thumbnail": item.get("thumbnail"),
                 "source": item.get("source")
             }
-            break
+            matched_posts.append(matched_post)
 
     if not matched_post and visual_matches:
+        print("No known social media links found. Fetching best overall match...")
         top_match = visual_matches[0]
         matched_post = {
             "title": top_match.get("title"),
@@ -123,11 +124,12 @@ def reverse_image_search(image_path: str = "face_extracted.jpg"):
             "thumbnail": top_match.get("thumbnail"),
             "source": top_match.get("source")
         }
+        matched_posts.append(matched_post)
 
 
 
     if not matched_post:
         raise RuntimeError("No matching web or social media results found.")
-    return matched_post
+    return matched_posts
 
 print(reverse_image_search())
