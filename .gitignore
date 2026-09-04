@@ -1,1 +1,23 @@
+# Environment
 .env
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Images (generated at runtime)
+input_face.jpg
+face_extracted.jpg
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Solidity compiler artifacts
+contracts/FaceVerification_abi.json
